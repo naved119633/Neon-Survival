@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Neon Survival</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>🎮 Neon Survival - Admin Dashboard</h1>
+            <div class="admin-info">
+                <span id="adminName">Admin Panel</span>
+                <button id="logoutAdminBtn" class="logout-btn">🚪 Logout</button>
+            </div>
+        </header>
+
+        <!-- Admin Login Screen -->
+        <div id="adminLoginScreen" class="admin-login">
+            <div class="login-box">
+                <h2>🔐 Admin Login</h2>
+                <input type="text" id="adminUsername" placeholder="Enter Admin Username" />
+                <input type="password" id="adminPassword" placeholder="Enter Admin Password" />
+                <button id="adminLoginBtn">Login</button>
+                <p class="hint">Enter admin credentials to continue</p>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard Content -->
+        <div id="adminDashboard" class="hidden">
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-box">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <h3 id="approvedUsers">0</h3>
+                        <p>Approved</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-info">
+                        <h3 id="pendingUsers">0</h3>
+                        <p>Pending</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">❌</div>
+                    <div class="stat-info">
+                        <h3 id="blockedUsers">0</h3>
+                        <p>Blocked</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="pending">⏳ Pending Approval</button>
+                <button class="tab-btn" data-tab="approved">✅ Approved Users</button>
+                <button class="tab-btn" data-tab="blocked">❌ Blocked Users</button>
+                <button class="tab-btn" data-tab="all">👥 All Users</button>
+            </div>
+
+            <!-- User Tables -->
+            <div class="tab-content active" id="pending-tab">
+                <h2>⏳ Pending Approval</h2>
+                <div class="table-container">
+                    <table id="pendingTable">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Login Type</th>
+                                <th>Identifier</th>
+                                <th>Registered</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingTableBody">
+                            <tr><td colspan="5" class="no-data">No pending users</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="approved-tab">
+                <h2>✅ Approved Users</h2>
+                <div class="table-container">
+                    <table id="approvedTable">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Login Type</th>
+                                <th>High Score</th>
+                                <th>Games Played</th>
+                                <th>Last Played</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approvedTableBody">
+                            <tr><td colspan="6" class="no-data">No approved users</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="blocked-tab">
+                <h2>❌ Blocked Users</h2>
+                <div class="table-container">
+                    <table id="blockedTable">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Login Type</th>
+                                <th>Blocked Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blockedTableBody">
+                            <tr><td colspan="4" class="no-data">No blocked users</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content" id="all-tab">
+                <h2>👥 All Users</h2>
+                <div class="table-container">
+                    <table id="allTable">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Login Type</th>
+                                <th>High Score</th>
+                                <th>Games</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allTableBody">
+                            <tr><td colspan="6" class="no-data">No users found</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

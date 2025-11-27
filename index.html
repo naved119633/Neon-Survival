@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Neon Survival – AI Enemy Shooter</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Prevent favicon 404 error -->
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen">
+        <div class="splash-content">
+            <div class="developer-text">Developed By</div>
+            <div class="developer-name">Naved</div>
+            <div class="splash-subtitle">Neon Survival</div>
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <h1>Neon Survival</h1>
+        <p class="subtitle">
+            Move: A/D (Left/Right) | Auto-Fire | Dash: Shift | Ultimate: Q | Pause: Space | Mute: M | Weapons: 1-4
+        </p>
+        
+        <!-- Login System Completely Removed - Anyone Can Play -->
+        
+        <canvas id="gameCanvas" width="900" height="550"></canvas>
+
+        <div class="info-row">
+            <span id="timeInfo">⏱️ 0s</span>
+            <span id="healthInfo">❤️ 3/3</span>
+            <span id="scoreInfo">🎯 0 (x1)</span>
+            <span id="enemyInfo">👾 0</span>
+            <span id="waveInfo">🌊 Wave 1 | 💰0 💎0</span>
+        </div>
+        
+        <div id="achievementBox" class="hidden">
+            <span id="achievementText">Achievement Unlocked!</span>
+        </div>
+
+        <div id="startScreen">
+            <h2>Welcome, Operator</h2>
+            <p>Survive as long as you can. AI-driven enemies will adapt and swarm you.</p>
+            <p class="small">Press <strong>Enter</strong> or click <strong>Play</strong> to begin.</p>
+            <div class="difficulty-select">
+                <label>Difficulty:</label>
+                <select id="difficultySelect">
+                    <option value="easy">😊 Easy</option>
+                    <option value="normal" selected>😐 Normal</option>
+                    <option value="hard">😈 Hard</option>
+                </select>
+            </div>
+            <button id="startBtn">Play</button>
+            <button id="shopBtn" class="shop-btn">🏪 Shop</button>
+            <button id="statsBtn" class="stats-btn">📊 Stats</button>
+            <button id="challengesBtn" class="challenges-btn">🎯 Challenges</button>
+            <button id="perksBtn">⚡ Perks</button>
+        </div>
+
+        <div id="pauseBanner" class="hidden">
+            <span>PAUSED</span>
+        </div>
+
+        <div id="gameOverScreen" class="hidden">
+            <h2>Run Terminated</h2>
+            <p id="finalTime"></p>
+            <p id="finalScore"></p>
+            <p id="highScoreDisplay"></p>
+            <div id="leaderboardContainer">
+                <h3>🏆 Leaderboard</h3>
+                <div id="leaderboardList"></div>
+            </div>
+            <button id="restartBtn">Play Again</button>
+        </div>
+
+        <!-- Shop Screen -->
+        <div id="shopScreen" class="hidden">
+            <h2>🏪 Upgrade Shop</h2>
+            <div class="shop-balance">
+                <span id="shopCoins">💰 0</span>
+                <span id="shopGems">💎 0</span>
+            </div>
+            
+            <div class="shop-tabs">
+                <button class="shop-tab active" data-tab="weapons">🔫 Weapons</button>
+                <button class="shop-tab" data-tab="abilities">⚡ Abilities</button>
+                <button class="shop-tab" data-tab="perks">💪 Perks</button>
+            </div>
+            
+            <div class="shop-content">
+                <!-- Weapons Tab -->
+                <div class="shop-tab-content active" id="weapons-tab">
+                    <div class="shop-item" data-item="weapon-damage">
+                        <div class="item-icon">⚔️</div>
+                        <div class="item-info">
+                            <h3>Weapon Damage</h3>
+                            <p>Increase bullet damage by 20%</p>
+                            <div class="item-level">Level: <span id="damage-level">0</span>/10</div>
+                        </div>
+                        <button class="buy-btn" data-cost="50" data-type="coins">💰 50</button>
+                    </div>
+                    
+                    <div class="shop-item" data-item="fire-rate">
+                        <div class="item-icon">🔥</div>
+                        <div class="item-info">
+                            <h3>Fire Rate</h3>
+                            <p>Shoot faster by 15%</p>
+                            <div class="item-level">Level: <span id="firerate-level">0</span>/10</div>
+                        </div>
+                        <button class="buy-btn" data-cost="40" data-type="coins">💰 40</button>
+                    </div>
+                    
+                    <div class="shop-item" data-item="bullet-speed">
+                        <div class="item-icon">⚡</div>
+                        <div class="item-info">
+                            <h3>Bullet Speed</h3>
+                            <p>Bullets travel 25% faster</p>
+                            <div class="item-level">Level: <span id="bulletspeed-level">0</span>/10</div>
+                        </div>
+                        <button class="buy-btn" data-cost="30" data-type="coins">💰 30</button>
+                    </div>
+                </div>
+                
+                <!-- Abilities Tab -->
+                <div class="shop-tab-content" id="abilities-tab">
+                    <div class="shop-item" data-item="shield-duration">
+                        <div class="item-icon">🛡️</div>
+                        <div class="item-info">
+                            <h3>Shield Duration</h3>
+                            <p>Shield lasts 50% longer</p>
+                            <div class="item-level">Level: <span id="shield-level">0</span>/5</div>
+                        </div>
+                        <button class="buy-btn" data-cost="2" data-type="gems">💎 2</button>
+                    </div>
+                    
+                    <div class="shop-item" data-item="dash-cooldown">
+                        <div class="item-icon">💨</div>
+                        <div class="item-info">
+                            <h3>Dash Cooldown</h3>
+                            <p>Dash recharges 30% faster</p>
+                            <div class="item-level">Level: <span id="dash-level">0</span>/5</div>
+                        </div>
+                        <button class="buy-btn" data-cost="2" data-type="gems">💎 2</button>
+                    </div>
+                    
+                    <div class="shop-item" data-item="ultimate-charge">
+                        <div class="item-icon">⚡</div>
+                        <div class="item-info">
+                            <h3>Ultimate Charge</h3>
+                            <p>Ultimate charges 40% faster</p>
+                            <div class="item-level">Level: <span id="ultimate-level">0</span>/5</div>
+                        </div>
+                        <button class="buy-btn" data-cost="3" data-type="gems">💎 3</button>
+                    </div>
+                </div>
+                
+                <!-- Perks Tab -->
+                <div class="shop-tab-content" id="perks-tab">
+                    <div class="shop-item" data-item="max-health">
+                        <div class="item-icon">❤️</div>
+                        <div class="item-info">
+                            <h3>Max Health</h3>
+                            <p>Increase maximum health by 1</p>
+                            <div class="item-level">Level: <span id="health-level">0</span>/10</div>
+                        </div>
+                        <button class="buy-btn" data-cost="100" data-type="coins">💰 100</button>
+                    </div>
+                    
+                    <div class="shop-item" data-item="movement-speed">
+                        <div class="item-icon">🏃</div>
+                        <div class="item-info">
+                            <h3>Movement Speed</h3>
+                            <p>Move 10% faster</p>
+                            <div class="item-level">Level: <span id="speed-level">0</span>/10</div>
+                        </div>
+                        <button class="buy-btn" data-cost="60" data-type="coins">💰 60</button>
+                    </div>
+                    
+                    <div class="shop-item" data-item="luck">
+                        <div class="item-icon">🍀</div>
+                        <div class="item-info">
+                            <h3>Luck</h3>
+                            <p>Better drops & critical chance</p>
+                            <div class="item-level">Level: <span id="luck-level">0</span>/10</div>
+                        </div>
+                        <button class="buy-btn" data-cost="80" data-type="coins">💰 80</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="closeShopBtn" class="close-shop-btn">Close Shop</button>
+        </div>
+
+        <!-- Daily Challenges Screen -->
+        <div id="challengesScreen" class="hidden">
+            <h2>🎯 Daily Challenges</h2>
+            <p class="challenge-timer">⏰ Resets in: <span id="challengeTimer">--:--:--</span></p>
+            
+            <div class="challenges-container">
+                <div class="challenge-card" id="challenge1">
+                    <div class="challenge-header">
+                        <span class="challenge-icon">🎯</span>
+                        <span class="challenge-status">⏳</span>
+                    </div>
+                    <h3 class="challenge-title">Loading...</h3>
+                    <p class="challenge-desc">Loading challenge...</p>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress1"></div>
+                        </div>
+                        <span class="progress-text" id="progressText1">0/0</span>
+                    </div>
+                    <div class="challenge-reward">
+                        <span>💰 <span id="reward1">0</span></span>
+                        <span>💎 <span id="rewardGem1">0</span></span>
+                    </div>
+                </div>
+                
+                <div class="challenge-card" id="challenge2">
+                    <div class="challenge-header">
+                        <span class="challenge-icon">⚔️</span>
+                        <span class="challenge-status">⏳</span>
+                    </div>
+                    <h3 class="challenge-title">Loading...</h3>
+                    <p class="challenge-desc">Loading challenge...</p>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress2"></div>
+                        </div>
+                        <span class="progress-text" id="progressText2">0/0</span>
+                    </div>
+                    <div class="challenge-reward">
+                        <span>💰 <span id="reward2">0</span></span>
+                        <span>💎 <span id="rewardGem2">0</span></span>
+                    </div>
+                </div>
+                
+                <div class="challenge-card" id="challenge3">
+                    <div class="challenge-header">
+                        <span class="challenge-icon">🏆</span>
+                        <span class="challenge-status">⏳</span>
+                    </div>
+                    <h3 class="challenge-title">Loading...</h3>
+                    <p class="challenge-desc">Loading challenge...</p>
+                    <div class="challenge-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress3"></div>
+                        </div>
+                        <span class="progress-text" id="progressText3">0/0</span>
+                    </div>
+                    <div class="challenge-reward">
+                        <span>💰 <span id="reward3">0</span></span>
+                        <span>💎 <span id="rewardGem3">0</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="closeChallengesBtn" class="close-shop-btn">Close Challenges</button>
+        </div>
+
+        <!-- Statistics Screen -->
+        <div id="statsScreen" class="hidden">
+            <h2>📊 Player Statistics</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🎮</div>
+                    <div class="stat-info">
+                        <h3 id="totalGames">0</h3>
+                        <p>Total Games</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-info">
+                        <h3 id="totalTime">0m</h3>
+                        <p>Play Time</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">💀</div>
+                    <div class="stat-info">
+                        <h3 id="totalKillsStat">0</h3>
+                        <p>Total Kills</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-info">
+                        <h3 id="highScoreStat">0</h3>
+                        <p>High Score</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-info">
+                        <h3 id="accuracyStat">0%</h3>
+                        <p>Accuracy</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-info">
+                        <h3 id="maxStreakStat">0</h3>
+                        <p>Max Streak</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎮</div>
+                    <div class="stat-info">
+                        <h3 id="maxLevelStat">1</h3>
+                        <p>Max Level</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3 id="totalCoinsStat">0</h3>
+                        <p>Coins Earned</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-details">
+                <h3>🔫 Favorite Weapon</h3>
+                <p id="favoriteWeapon">Normal</p>
+                
+                <h3>⚔️ Kill/Death Ratio</h3>
+                <p id="kdRatio">0.0</p>
+                
+                <h3>📈 Average Score</h3>
+                <p id="avgScore">0</p>
+            </div>
+            
+            <button id="closeStatsBtn" class="close-shop-btn">Close Stats</button>
+        </div>
+
+        <div id="difficultySelector" class="hidden">
+            <h3>Select Difficulty</h3>
+            <button class="diff-btn" data-diff="easy">😊 Easy</button>
+            <button class="diff-btn" data-diff="normal">😐 Normal</button>
+            <button class="diff-btn" data-diff="hard">😈 Hard</button>
+        </div>
+
+        <!-- Perks Screen -->
+        <div id="perksScreen" class="hidden">
+            <h2>⚡ Perks System</h2>
+            <div class="perks-balance">
+                <span id="perksGems">💎 0 Gems</span>
+            </div>
+            
+            <div class="perks-container">
+                <div class="perk-card" data-perk="maxHealth">
+                    <div class="perk-icon">💚</div>
+                    <div class="perk-info">
+                        <h3>Max Health</h3>
+                        <p>Increase maximum health by 1</p>
+                        <div class="perk-level">Level: <span id="perk-health-level">0</span>/10</div>
+                    </div>
+                    <button class="perk-buy-btn" data-cost="5" data-perk="maxHealth">💎 5</button>
+                </div>
+                
+                <div class="perk-card" data-perk="damage">
+                    <div class="perk-icon">⚔️</div>
+                    <div class="perk-info">
+                        <h3>Damage Boost</h3>
+                        <p>Increase bullet damage permanently</p>
+                        <div class="perk-level">Level: <span id="perk-damage-level">0</span>/10</div>
+                    </div>
+                    <button class="perk-buy-btn" data-cost="5" data-perk="damage">💎 5</button>
+                </div>
+                
+                <div class="perk-card" data-perk="speed">
+                    <div class="perk-icon">⚡</div>
+                    <div class="perk-info">
+                        <h3>Speed Boost</h3>
+                        <p>Move faster permanently</p>
+                        <div class="perk-level">Level: <span id="perk-speed-level">0</span>/10</div>
+                    </div>
+                    <button class="perk-buy-btn" data-cost="5" data-perk="speed">💎 5</button>
+                </div>
+                
+                <div class="perk-card" data-perk="luck">
+                    <div class="perk-icon">🍀</div>
+                    <div class="perk-info">
+                        <h3>Luck</h3>
+                        <p>Better drops & critical chance</p>
+                        <div class="perk-level">Level: <span id="perk-luck-level">0</span>/10</div>
+                    </div>
+                    <button class="perk-buy-btn" data-cost="5" data-perk="luck">💎 5</button>
+                </div>
+            </div>
+            
+            <button id="closePerksBtn" class="close-shop-btn">Close Perks</button>
+        </div>
+
+        <div id="weaponHUD" class="hidden">
+            <div class="weapon-slot" data-weapon="1">1️⃣ Normal</div>
+            <div class="weapon-slot" data-weapon="2">2️⃣ Laser</div>
+            <div class="weapon-slot" data-weapon="3">3️⃣ Shotgun</div>
+            <div class="weapon-slot" data-weapon="4">4️⃣ Sniper</div>
+        </div>
+
+        <div id="miniMap"></div>
+        
+        <!-- Mobile Touch Controls with Joystick -->
+        <div id="mobileControls" class="hidden">
+            <!-- Left Side: Joystick for Movement -->
+            <div id="joystickContainer">
+                <div id="joystickBase"></div>
+                <div id="joystickStick"></div>
+            </div>
+            
+            <!-- Right Side: Action Buttons -->
+            <div id="actionButtons">
+                <button id="shootBtn" class="action-btn shoot-btn">🔫</button>
+                <button id="dashBtn" class="action-btn dash-btn">💨</button>
+                <button id="ultBtn" class="action-btn ult-btn">⚡</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
