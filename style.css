@@ -6,6 +6,10 @@
 
 body {
     min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -19,6 +23,11 @@ body {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 /* Splash Screen */
@@ -126,6 +135,14 @@ body {
     text-align: center;
     position: relative;
     animation: fadeIn 0.8s ease-in-out;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
 }
 
 @keyframes fadeIn {
@@ -140,9 +157,10 @@ body {
 }
 
 h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     letter-spacing: 4px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
+    margin-top: 10px;
     text-transform: uppercase;
     background: linear-gradient(90deg, #00f5ff, #ff00ff, #00f5ff);
     background-size: 200% auto;
@@ -161,25 +179,28 @@ h1 {
 }
 
 .subtitle {
-    margin-bottom: 15px;
-    font-size: 1rem;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.9);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     font-weight: 500;
+    padding: 0 10px;
 }
 
 canvas {
-    border-radius: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1e 100%);
     box-shadow: 
         0 25px 50px rgba(0, 0, 0, 0.8),
         0 0 50px rgba(102, 126, 234, 0.3),
         inset 0 0 30px rgba(0, 0, 0, 0.5);
     display: block;
-    margin: 0 auto 15px;
+    margin: 0 auto 10px;
     cursor: crosshair;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 100%;
+    max-height: 60vh;
 }
 
 canvas:hover {
@@ -193,14 +214,15 @@ canvas:hover {
 .info-row {
     display: flex;
     justify-content: space-between;
-    max-width: 900px;
+    max-width: 100%;
+    width: 95%;
     margin: 0 auto 10px;
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.95);
-    padding: 12px 20px;
+    padding: 8px 15px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    border-radius: 15px;
+    border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
@@ -806,43 +828,48 @@ Achievement Box */
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Weapon HUD */
+/* Weapon HUD - BOTTOM CENTER POSITION (Mobile Optimized) */
 #weaponHUD {
-    position: absolute;
-    bottom: 20px;
+    position: fixed;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 10px;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.9);
     border-radius: 15px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 255, 255, 0.4);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 255, 0.2);
+    z-index: 1000;
 }
 
 .weapon-slot {
-    padding: 10px 15px;
+    padding: 12px 18px;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    border-radius: 12px;
     color: #fff;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
 }
 
 .weapon-slot:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
 }
 
 .weapon-slot.active {
     background: rgba(0, 255, 255, 0.3);
     border-color: #00ffff;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    transform: scale(1.05);
 }
 
 /* Difficulty Selector */
@@ -1470,168 +1497,10 @@ Achievement Box */
     background: rgba(0, 245, 255, 0.8);
 }
 
-/* Mobile Touch Controls with Joystick */
-#mobileControls {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 180px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 30px;
-    z-index: 1000;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5), transparent);
-    pointer-events: none;
-}
-
-#mobileControls > * {
-    pointer-events: auto;
-}
-
-/* Joystick Container */
-#joystickContainer {
-    position: relative;
-    width: 140px;
-    height: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Joystick Base (Outer Circle) */
-#joystickBase {
-    position: absolute;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(100, 100, 100, 0.4), rgba(50, 50, 50, 0.6));
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        inset 0 0 20px rgba(0, 0, 0, 0.5),
-        0 5px 20px rgba(0, 0, 0, 0.7);
-}
-
-/* Joystick Stick (Inner Circle) */
-#joystickStick {
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #667eea, #764ba2);
-    border: 3px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
-        0 5px 15px rgba(0, 0, 0, 0.5),
-        inset 0 -2px 5px rgba(0, 0, 0, 0.3),
-        inset 0 2px 5px rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-    transition: transform 0.1s ease;
-    touch-action: none;
-}
-
-#joystickStick:active {
-    transform: scale(0.95);
-}
-
-/* Action Buttons Container */
-#actionButtons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-}
-
-/* Action Buttons */
-.action-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.4);
-    color: #fff;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 
-        0 8px 20px rgba(0, 0, 0, 0.6),
-        inset 0 -2px 5px rgba(0, 0, 0, 0.3),
-        inset 0 2px 5px rgba(255, 255, 255, 0.3);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.action-btn:active {
-    transform: scale(0.9);
-    box-shadow: 
-        0 4px 10px rgba(0, 0, 0, 0.6),
-        inset 0 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Green Shoot Button */
-.shoot-btn {
-    background: radial-gradient(circle at 30% 30%, #00ff88, #00cc44);
-    width: 100px;
-    height: 100px;
-    font-size: 32px;
-    border: 5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
-        0 10px 30px rgba(0, 255, 100, 0.5),
-        0 0 20px rgba(0, 255, 100, 0.3),
-        inset 0 -3px 8px rgba(0, 0, 0, 0.3),
-        inset 0 3px 8px rgba(255, 255, 255, 0.4);
-    animation: shootPulse 2s ease-in-out infinite;
-}
-
-@keyframes shootPulse {
-    0%, 100% {
-        box-shadow: 
-            0 10px 30px rgba(0, 255, 100, 0.5),
-            0 0 20px rgba(0, 255, 100, 0.3),
-            inset 0 -3px 8px rgba(0, 0, 0, 0.3),
-            inset 0 3px 8px rgba(255, 255, 255, 0.4);
-    }
-    50% {
-        box-shadow: 
-            0 10px 30px rgba(0, 255, 100, 0.8),
-            0 0 30px rgba(0, 255, 100, 0.6),
-            inset 0 -3px 8px rgba(0, 0, 0, 0.3),
-            inset 0 3px 8px rgba(255, 255, 255, 0.4);
-    }
-}
-
-.shoot-btn:active {
-    background: radial-gradient(circle at 30% 30%, #00cc44, #009933);
-}
-
-/* Cyan Dash Button */
-.dash-btn {
-    background: radial-gradient(circle at 30% 30%, #00ffff, #00cccc);
-    width: 70px;
-    height: 70px;
-    font-size: 24px;
-    box-shadow: 
-        0 8px 20px rgba(0, 255, 255, 0.4),
-        inset 0 -2px 5px rgba(0, 0, 0, 0.3),
-        inset 0 2px 5px rgba(255, 255, 255, 0.3);
-}
-
-/* Yellow Ultimate Button */
-.ult-btn {
-    background: radial-gradient(circle at 30% 30%, #ffeb3b, #ffc107);
-    width: 70px;
-    height: 70px;
-    font-size: 24px;
-    box-shadow: 
-        0 8px 20px rgba(255, 235, 59, 0.4),
-        inset 0 -2px 5px rgba(0, 0, 0, 0.3),
-        inset 0 2px 5px rgba(255, 255, 255, 0.3);
-}
+/* Mobile Touch Controls - REMOVED
+ * Now using direct touch-to-drag rocket control
+ * Touch the rocket and drag left/right to move
+ */
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
@@ -1639,24 +1508,31 @@ Achievement Box */
         overflow: hidden;
         padding: 0;
         margin: 0;
+        height: 100vh;
+        width: 100vw;
     }
     
     .wrapper {
         width: 100%;
-        padding: 5px;
+        height: 100%;
+        padding: 0;
+        margin: 0;
         max-width: 100vw;
+        max-height: 100vh;
     }
     
     h1 {
-        font-size: 1.8rem;
-        margin-bottom: 5px;
+        font-size: 1.5rem;
+        margin-bottom: 3px;
+        margin-top: 5px;
         letter-spacing: 2px;
     }
     
     .subtitle {
-        font-size: 0.75rem;
-        margin-bottom: 8px;
-        line-height: 1.3;
+        font-size: 0.65rem;
+        margin-bottom: 5px;
+        line-height: 1.2;
+        padding: 0 5px;
     }
     
     #loginScreen {
@@ -1684,12 +1560,17 @@ Achievement Box */
     }
     
     canvas {
-        width: 100% !important;
-        height: auto !important;
+        width: 100vw !important;
+        height: 100vh !important;
         max-width: 100vw;
-        border-radius: 10px;
-        border-width: 2px;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
         touch-action: none; /* Prevent scrolling on touch */
+        margin: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
     }
     
     .info-row {
@@ -1734,59 +1615,24 @@ Achievement Box */
     }
     
     #weaponHUD {
-        bottom: 115px;
-        flex-wrap: wrap;
-        gap: 4px;
-        padding: 6px;
-        max-width: 90%;
+        bottom: 10px;
+        flex-wrap: nowrap;
+        gap: 6px;
+        padding: 10px 12px;
+        max-width: 95%;
+        width: auto;
+        border-radius: 12px;
     }
     
     .weapon-slot {
-        padding: 6px 10px;
+        padding: 10px 12px;
         font-size: 0.75rem;
         flex: 1;
-        min-width: 70px;
+        min-width: 65px;
+        border-radius: 10px;
     }
     
-    #mobileControls {
-        display: flex !important;
-        height: 150px;
-        padding: 12px 15px;
-    }
-    
-    #joystickContainer {
-        width: 110px;
-        height: 110px;
-    }
-    
-    #joystickBase {
-        width: 110px;
-        height: 110px;
-    }
-    
-    #joystickStick {
-        width: 55px;
-        height: 55px;
-    }
-    
-    .action-btn {
-        width: 65px;
-        height: 65px;
-        font-size: 22px;
-    }
-    
-    .shoot-btn {
-        width: 85px;
-        height: 85px;
-        font-size: 26px;
-    }
-    
-    .dash-btn,
-    .ult-btn {
-        width: 55px;
-        height: 55px;
-        font-size: 18px;
-    }
+    /* Mobile controls removed - using direct touch-to-drag */
     
     #miniMap {
         display: none;
@@ -1918,24 +1764,12 @@ Achievement Box */
         font-size: 0.65rem;
     }
     
-    #mobileControls {
-        height: 130px;
-        padding: 8px 12px;
-    }
+    /* Mobile controls removed - using direct touch-to-drag */
     
-    #joystickContainer {
-        width: 95px;
-        height: 95px;
-    }
-    
-    #joystickBase {
-        width: 95px;
-        height: 95px;
-    }
-    
-    #joystickStick {
-        width: 48px;
-        height: 48px;
+    #weaponHUD {
+        bottom: 8px;
+        gap: 5px;
+        padding: 8px 10px;
     }
     
     .action-btn {
