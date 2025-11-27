@@ -379,6 +379,38 @@ document.querySelectorAll('.weapon-slot').forEach((slot, index) => {
     });
 });
 
+// Ability button clicks
+const dashBtnUI = document.getElementById('dashBtnUI');
+const ultBtnUI = document.getElementById('ultBtnUI');
+
+if (dashBtnUI) {
+    dashBtnUI.addEventListener('click', () => {
+        if (isRunning && !isPaused && player.dashCooldown === 0) {
+            activateDash();
+        }
+    });
+    dashBtnUI.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (isRunning && !isPaused && player.dashCooldown === 0) {
+            activateDash();
+        }
+    });
+}
+
+if (ultBtnUI) {
+    ultBtnUI.addEventListener('click', () => {
+        if (isRunning && !isPaused && player.ultimateCharge >= 100) {
+            activateUltimate();
+        }
+    });
+    ultBtnUI.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (isRunning && !isPaused && player.ultimateCharge >= 100) {
+            activateUltimate();
+        }
+    });
+}
+
 document.addEventListener("keyup", (e) => {
     keys[e.key] = false;
 });
@@ -983,6 +1015,7 @@ function startGame() {
     // UI updates
     startScreen.classList.add("hidden");
     weaponHUD.classList.remove("hidden");
+    document.getElementById("abilityButtons").classList.remove("hidden");
     gameOverScreen.classList.add("hidden");
     
     // Mobile controls removed - using direct touch-to-drag
