@@ -6,14 +6,12 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Make canvas responsive
+// Make canvas responsive - FULLSCREEN on mobile!
 function resizeCanvas() {
     if (window.innerWidth <= 768) {
-        // Mobile - smaller canvas
-        const maxWidth = window.innerWidth - 20;
-        const aspectRatio = 550 / 900;
-        canvas.width = Math.min(maxWidth, 600);
-        canvas.height = canvas.width * aspectRatio;
+        // Mobile - FULLSCREEN!
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     } else {
         // Desktop - original size
         canvas.width = 900;
@@ -89,14 +87,14 @@ const challengesBtn = document.getElementById("challengesBtn");
 const closeChallengesBtn = document.getElementById("closeChallengesBtn");
 const challengeTimer = document.getElementById("challengeTimer");
 
-// Mobile Controls
-const mobileControls = document.getElementById("mobileControls");
-const joystickContainer = document.getElementById("joystickContainer");
-const joystickBase = document.getElementById("joystickBase");
-const joystickStick = document.getElementById("joystickStick");
-const shootBtn = document.getElementById("shootBtn");
-const dashBtn = document.getElementById("dashBtn");
-const ultBtn = document.getElementById("ultBtn");
+// Mobile Controls - REMOVED (Using direct touch-to-move)
+// const mobileControls = document.getElementById("mobileControls");
+// const joystickContainer = document.getElementById("joystickContainer");
+// const joystickBase = document.getElementById("joystickBase");
+// const joystickStick = document.getElementById("joystickStick");
+// const shootBtn = document.getElementById("shootBtn");
+// const dashBtn = document.getElementById("dashBtn");
+// const ultBtn = document.getElementById("ultBtn");
 
 // Game State
 let isGameOver = false;
@@ -180,11 +178,10 @@ let keys = {};
 let mousePos = { x: canvas.width / 2, y: canvas.height / 2 };
 let mouseDown = false;
 
-// Mobile Touch Input
+// Mobile Touch Input - Direct touch-to-move
 let touchShooting = false;
-let joystickActive = false;
-let joystickX = 0;
-let joystickY = 0;
+let touchMoving = false;
+let touchTargetX = 0;
 
 // Spawn timers
 let spawnTimer = 0;
@@ -398,6 +395,61 @@ canvas.addEventListener("mousedown", (e) => {
 });
 
 canvas.addEventListener("mouseup", () => {
+    mouseDown = false;
+});
+
+// Touch events for mobile - Touch rocket to drag left/right
+let touchingRocket = false;
+let touchStartX = 0;
+let touchStartPlayerX = 0;
+
+canvas.addEventListener("touchstart", (e) => {
+    if (!isRunning || isPaused || isGameOver) return;
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const touchX = touch.clientX - rect.left;
+    const touchY = touch.clientY - rect.top;
+    
+    // Check if touching the rocket
+    const dx = touchX - player.x;
+    const dy = touchY - player.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    if (distance < player.size * 3) {
+        // Touching rocket - enable drag mode
+        touchingRocket = true;
+        touchStartX = touchX;
+        touchStartPlayerX = player.x;
+    }
+    
+    mouseDown = true;
+});
+
+canvas.addEventListener("touchmove", (e) => {
+    if (!isRunning || isPaused || isGameOver) return;
+    e.preventDefault();
+    
+    if (touchingRocket) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        const touchX = touch.clientX - rect.left;
+        
+        // Calculate drag distance
+        const dragDelta = touchX - touchStartX;
+        
+        // Move player by drag amount
+        player.targetX = touchStartPlayerX + dragDelta;
+        player.x = player.targetX;
+        
+        // Keep within bounds
+        player.x = Math.max(player.size * 2, Math.min(canvas.width - player.size * 2, player.x));
+    }
+});
+
+canvas.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    touchingRocket = false;
     mouseDown = false;
 });
 
@@ -836,141 +888,13 @@ window.addEventListener('load', () => {
 });
 
 // ========================================
-// MOBILE TOUCH CONTROLS - JOYSTICK
+// MOBILE TOUCH CONTROLS - REMOVED
+// Now using direct touch-to-drag rocket control
 // ========================================
-
-// Joystick Variables
-let joystickCenterX = 0;
-let joystickCenterY = 0;
-const joystickMaxDistance = 35; // Maximum distance stick can move from center
-
-// Initialize joystick center position
-function initJoystick() {
-    const rect = joystickBase.getBoundingClientRect();
-    joystickCenterX = rect.left + rect.width / 2;
-    joystickCenterY = rect.top + rect.height / 2;
-}
-
-// Handle joystick touch/mouse start
-function handleJoystickStart(e) {
-    e.preventDefault();
-    joystickActive = true;
-    initJoystick();
-    handleJoystickMove(e);
-}
-
-// Handle joystick movement
-function handleJoystickMove(e) {
-    if (!joystickActive) return;
-    
-    e.preventDefault();
-    
-    // Get touch or mouse position
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    // Calculate distance from center
-    let deltaX = clientX - joystickCenterX;
-    let deltaY = clientY - joystickCenterY;
-    
-    // Calculate distance
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    
-    // Limit to max distance
-    if (distance > joystickMaxDistance) {
-        const angle = Math.atan2(deltaY, deltaX);
-        deltaX = Math.cos(angle) * joystickMaxDistance;
-        deltaY = Math.sin(angle) * joystickMaxDistance;
-    }
-    
-    // Update stick position
-    joystickStick.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-    
-    // Normalize values (-1 to 1)
-    joystickX = deltaX / joystickMaxDistance;
-    joystickY = deltaY / joystickMaxDistance;
-}
-
-// Handle joystick end
-function handleJoystickEnd(e) {
-    e.preventDefault();
-    joystickActive = false;
-    joystickX = 0;
-    joystickY = 0;
-    
-    // Reset stick position with smooth transition
-    joystickStick.style.transform = 'translate(0px, 0px)';
-}
-
-// Touch events for joystick
-joystickStick.addEventListener("touchstart", handleJoystickStart);
-joystickStick.addEventListener("touchmove", handleJoystickMove);
-joystickStick.addEventListener("touchend", handleJoystickEnd);
-joystickStick.addEventListener("touchcancel", handleJoystickEnd);
-
-// Mouse events for joystick (for testing on desktop)
-joystickStick.addEventListener("mousedown", handleJoystickStart);
-document.addEventListener("mousemove", handleJoystickMove);
-document.addEventListener("mouseup", handleJoystickEnd);
-
-// Also allow dragging from base
-joystickBase.addEventListener("touchstart", handleJoystickStart);
-joystickBase.addEventListener("mousedown", handleJoystickStart);
-
-// Shoot Button
-shootBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    touchShooting = true;
-});
-shootBtn.addEventListener("touchend", (e) => {
-    e.preventDefault();
-    touchShooting = false;
-});
-shootBtn.addEventListener("mousedown", (e) => {
-    e.preventDefault();
-    touchShooting = true;
-});
-shootBtn.addEventListener("mouseup", (e) => {
-    e.preventDefault();
-    touchShooting = false;
-});
-
-// Dash Button
-dashBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    if (isRunning && !isPaused && player.dashCooldown === 0) {
-        activateDash();
-    }
-});
-dashBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (isRunning && !isPaused && player.dashCooldown === 0) {
-        activateDash();
-    }
-});
-
-// Ultimate Button
-ultBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    if (isRunning && !isPaused && player.ultimateCharge >= 100) {
-        activateUltimate();
-    }
-});
-ultBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (isRunning && !isPaused && player.ultimateCharge >= 100) {
-        activateUltimate();
-    }
-});
 
 // Detect if mobile device
 function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-}
-
-// Show mobile controls on mobile devices
-if (isMobileDevice()) {
-    mobileControls.classList.remove("hidden");
 }
 
 function startGame() {
@@ -1061,10 +985,7 @@ function startGame() {
     weaponHUD.classList.remove("hidden");
     gameOverScreen.classList.add("hidden");
     
-    // Show mobile controls if on mobile
-    if (isMobileDevice()) {
-        mobileControls.classList.remove("hidden");
-    }
+    // Mobile controls removed - using direct touch-to-drag
     
     startBackgroundMusic();
     updateWeaponHUD();
@@ -1212,10 +1133,8 @@ function updatePlayer() {
         targetVx = maxSpeed;
     }
     
-    // Mobile Joystick controls - SIRF HORIZONTAL
-    if (joystickActive) {
-        targetVx = joystickX * maxSpeed;
-    }
+    // Mobile touch controls handled directly in touch events
+    // No joystick needed - player drags rocket directly
     
     // AI Smooth interpolation with easing
     if (targetVx !== 0) {
