@@ -834,10 +834,10 @@ Achievement Box */
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Weapon HUD - Above Info Row */
+/* Weapon HUD - Higher position to avoid overlap */
 #weaponHUD {
     position: fixed;
-    bottom: 70px;
+    bottom: 120px;
     right: 10px;
     display: flex;
     gap: 8px;
@@ -877,10 +877,10 @@ Achievement Box */
     transform: scale(1.05);
 }
 
-/* Ability Buttons - Left side of Weapon HUD */
+/* Ability Buttons - Same height as Weapon HUD */
 #abilityButtons {
     position: fixed;
-    bottom: 70px;
+    bottom: 120px;
     left: 10px;
     display: flex;
     gap: 8px;
@@ -1644,7 +1644,7 @@ Achievement Box */
     }
     
     #abilityButtons {
-        bottom: 60px;
+        bottom: 100px;
         left: 5px;
         gap: 6px;
     }
@@ -1682,7 +1682,7 @@ Achievement Box */
     }
     
     #weaponHUD {
-        bottom: 60px;
+        bottom: 100px;
         right: 5px;
         flex-wrap: nowrap;
         gap: 5px;
