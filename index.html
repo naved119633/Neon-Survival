@@ -406,30 +406,15 @@
             <button id="closePerksBtn" class="close-shop-btn">Close Perks</button>
         </div>
 
+        <!-- Weapon HUD - Bottom Center Position -->
         <div id="weaponHUD" class="hidden">
-            <div class="weapon-slot" data-weapon="1">1️⃣ Normal</div>
-            <div class="weapon-slot" data-weapon="2">2️⃣ Laser</div>
-            <div class="weapon-slot" data-weapon="3">3️⃣ Shotgun</div>
-            <div class="weapon-slot" data-weapon="4">4️⃣ Sniper</div>
+            <div class="weapon-slot" data-weapon="1">Normal</div>
+            <div class="weapon-slot" data-weapon="2">Laser</div>
+            <div class="weapon-slot" data-weapon="3">Shotgun</div>
+            <div class="weapon-slot" data-weapon="4">Sniper</div>
         </div>
 
-        <div id="miniMap"></div>
-        
-        <!-- Mobile Touch Controls with Joystick -->
-        <div id="mobileControls" class="hidden">
-            <!-- Left Side: Joystick for Movement -->
-            <div id="joystickContainer">
-                <div id="joystickBase"></div>
-                <div id="joystickStick"></div>
-            </div>
-            
-            <!-- Right Side: Action Buttons -->
-            <div id="actionButtons">
-                <button id="shootBtn" class="action-btn shoot-btn">🔫</button>
-                <button id="dashBtn" class="action-btn dash-btn">💨</button>
-                <button id="ultBtn" class="action-btn ult-btn">⚡</button>
-            </div>
-        </div>
+        <!-- Mobile Touch Controls - REMOVED (Using direct touch-to-drag rocket control) -->
     </div>
 
     <script src="game.js"></script>
