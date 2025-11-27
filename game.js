@@ -130,7 +130,7 @@ let completedLevels = []; // Array of completed level numbers
 // Player - NEECHE position pe!
 const player = {
     x: canvas.width / 2,
-    y: canvas.height - 50, // NEECHE - bottom of screen!
+    y: canvas.height - 180, // Higher up to avoid UI buttons!
     size: 16,
     speed: 2.0, // Slower speed for better control!
     vx: 0,
@@ -985,7 +985,7 @@ function startGame() {
     
     // Reset player
     player.x = canvas.width / 2;
-    player.y = canvas.height - 50; // Bottom of screen
+    player.y = canvas.height - 180; // Higher up to avoid UI buttons
     player.vx = 0;
     player.vy = 0;
     player.maxHealth = 8 + perks.maxHealth;
@@ -1206,9 +1206,9 @@ function updatePlayer() {
     // Keep player within screen bounds (horizontal only)
     player.x = Math.max(player.size * 2, Math.min(canvas.width - player.size * 2, player.x));
     
-    // Y position ko fixed rakhte hain bottom pe with subtle floating effect
+    // Y position ko fixed rakhte hain higher up with subtle floating effect
     const floatEffect = Math.sin(gameTime * 0.05) * 1.5;
-    player.y = canvas.height - 50 + floatEffect;
+    player.y = canvas.height - 180 + floatEffect;
     
     // Update power-up timers
     if (player.invincibleTimer > 0) {
