@@ -1572,8 +1572,17 @@ function updateEnemies() {
         enemy.x += dirX * enemy.speed;
         enemy.y += dirY * enemy.speed;
         
-        // Remove enemies that go off screen (bottom)
+        // Remove enemies that go off screen (bottom) - HEALTH PENALTY!
         if (enemy.y > canvas.height + 50) {
+            // Player missed the enemy - lose health!
+            player.health -= 1;
+            showFloatingText(canvas.width / 2, canvas.height - 100, "ENEMY ESCAPED! -1 ❤️", "#ff0000", 30);
+            
+            // Check if player died
+            if (player.health <= 0) {
+                gameOver();
+            }
+            
             const index = enemies.indexOf(enemy);
             if (index > -1) {
                 enemies.splice(index, 1);
