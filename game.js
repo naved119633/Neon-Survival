@@ -1268,29 +1268,15 @@ function updatePlayer() {
 // ========================================
 
 function shootBullet() {
-    // AUTO-AIM - Find nearest enemy
+    // MANUAL AIM - Shoot straight up (no auto-aim)
     let targetX = player.x;
-    let targetY = 0; // Shoot upwards by default
-    let nearestDist = Infinity;
+    let targetY = 0; // Shoot upwards
     
-    for (let enemy of enemies) {
-        const dx = enemy.x - player.x;
-        const dy = enemy.y - player.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        if (dist < nearestDist) {
-            nearestDist = dist;
-            targetX = enemy.x;
-            targetY = enemy.y;
-        }
-    }
-    
-    // Calculate direction
-    const dx = targetX - player.x;
-    const dy = targetY - player.y;
-    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-    const dirX = dx / dist;
-    const dirY = dy / dist;
+    // Calculate direction - straight up
+    const dx = 0; // No horizontal movement
+    const dy = -1; // Straight up
+    const dirX = 0;
+    const dirY = -1;
     const angle = Math.atan2(dirY, dirX);
     
     shootSound();
@@ -2472,7 +2458,7 @@ function drawPlayer() {
     
     ctx.save();
     ctx.translate(player.x, player.y);
-    ctx.rotate(Math.PI); // Ship upar ki taraf point karega
+    ctx.rotate(0); // Ship upar ki taraf point karega (seedha)
     
     // === MAIN BODY ===
     
@@ -3213,57 +3199,10 @@ function drawExplosions() {
     }
 }
 
-function drawAbilityUI() {
-    ctx.save();
-    
-    // Dash cooldown
-    const dashX = 20;
-    const dashY = canvas.height - 80;
-    const dashReady = player.dashCooldown === 0;
-    
-    ctx.fillStyle = dashReady ? "rgba(0, 255, 255, 0.3)" : "rgba(100, 100, 100, 0.3)";
-    ctx.fillRect(dashX, dashY, 50, 50);
-    ctx.strokeStyle = dashReady ? "#00ffff" : "#666";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(dashX, dashY, 50, 50);
-    
-    ctx.font = "24px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "#fff";
-    ctx.fillText("💨", dashX + 25, dashY + 20);
-    ctx.font = "10px Arial";
-    ctx.fillText("SHIFT", dashX + 25, dashY + 40);
-    
-    if (!dashReady) {
-        const cooldownPercent = 1 - (player.dashCooldown / 180);
-        ctx.fillStyle = "rgba(0, 255, 255, 0.5)";
-        ctx.fillRect(dashX, dashY + 50 - (50 * cooldownPercent), 50, 50 * cooldownPercent);
-    }
-    
-    // Ultimate charge
-    const ultX = 80;
-    const ultY = canvas.height - 80;
-    const ultReady = player.ultimateCharge >= 100;
-    
-    ctx.fillStyle = ultReady ? "rgba(255, 255, 0, 0.3)" : "rgba(100, 100, 100, 0.3)";
-    ctx.fillRect(ultX, ultY, 50, 50);
-    ctx.strokeStyle = ultReady ? "#ffff00" : "#666";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(ultX, ultY, 50, 50);
-    
-    ctx.font = "24px Arial";
-    ctx.fillStyle = "#fff";
-    ctx.fillText("⚡", ultX + 25, ultY + 20);
-    ctx.font = "10px Arial";
-    ctx.fillText("Q", ultX + 25, ultY + 40);
-    
-    // Charge bar
-    ctx.fillStyle = "rgba(255, 255, 0, 0.5)";
-    ctx.fillRect(ultX, ultY + 50 - (50 * player.ultimateCharge / 100), 50, 50 * player.ultimateCharge / 100);
-    
-    ctx.restore();
-}
+// REMOVED: Canvas-based ability UI (now using HTML buttons on right side)
+// function drawAbilityUI() {
+//     ... removed to avoid duplicate buttons
+// }
 
 // ========================================
 // HUD
@@ -3554,7 +3493,7 @@ function gameLoop() {
     drawDrops();
     drawParticles();
     drawFloatingTexts();
-    drawAbilityUI();
+    // drawAbilityUI(); // REMOVED - using HTML buttons instead
     drawStreakUI();
     drawLevelProgressBar();
     drawLevelTransition();
