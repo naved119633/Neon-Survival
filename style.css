@@ -877,11 +877,11 @@ Achievement Box */
     transform: scale(1.05);
 }
 
-/* Ability Buttons - Same height as Weapon HUD */
+/* Ability Buttons - Next to Weapon HUD on right side */
 #abilityButtons {
     position: fixed;
-    bottom: 140px;
-    left: 10px;
+    bottom: 200px;
+    right: 10px;
     display: flex;
     gap: 8px;
     z-index: 1000;
@@ -1644,8 +1644,8 @@ Achievement Box */
     }
     
     #abilityButtons {
-        bottom: 120px;
-        left: 5px;
+        bottom: 180px;
+        right: 5px;
         gap: 6px;
     }
     
